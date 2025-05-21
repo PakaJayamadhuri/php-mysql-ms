@@ -1,7 +1,7 @@
 version: "3"
 services:
   web:
-    image: php:v1
+    image: "${DOCKER_IMAGE}"
     ports:
       - "8000-8001:80"
     deploy:
@@ -10,7 +10,7 @@ services:
       - mysql
 
   mysql:
-    image: sql:v1
+    image: pakajayamadhuri/devops_practice:sql
     volumes:
       - db_data:/var/lib/mysql
     environment:

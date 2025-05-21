@@ -3,7 +3,7 @@ pipeline{
     environment{
         BUILD_SERVER_IP='ec2-user@172.31.4.110'
        IMAGE_NAME='pakajayamadhuri/devops_practice:php$BUILD_NUMBER'
-       //DEPLOY_SERVER_IP='ec2-user@172.31.1.112'
+       DEPLOY_SERVER_IP='ec2-user@172.31.10.207'
     }
 
     stages{
@@ -25,21 +25,21 @@ pipeline{
         }
     }
 }
-// stage('RUN PHP_DB with Dockercompose'){
-//             agent any
-//             steps{
-//                 script{
-//                 sshagent(['slave2']) {
-//                 withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-//                 echo "Deploy PHP and Sql containers"
-//                 sh "scp -o StrictHostKeyChecking=no -r deployConfig ${DEPLOY_SERVER_IP}:/home/ec2-user"
-//                 sh "ssh -o StrictHostKeyChecking=no ${DEPLOY_SERVER_IP} 'bash ~/deployConfig/docker-script.sh'"
-//                 sh "ssh ${DEPLOY_SERVER_IP} sudo docker login -u $USERNAME -p $PASSWORD"
-//                 sh "ssh ${DEPLOY_SERVER_IP} bash /home/ec2-user/deployConfig/docker-compose-script.sh ${IMAGE_NAME}"
-//                 }
-//             }
-//         }
-//     }
-// }
+stage('RUN PHP_DB with Dockercompose'){
+            agent any
+            steps{
+                script{
+                sshagent(['slave2']) {
+                withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+                echo "Deploy PHP and Sql containers"
+                sh "scp -o StrictHostKeyChecking=no -r deployConfig ${DEPLOY_SERVER_IP}:/home/ec2-user"
+                sh "ssh -o StrictHostKeyChecking=no ${DEPLOY_SERVER_IP} 'bash ~/deployConfig/docker-script.sh'"
+                sh "ssh ${DEPLOY_SERVER_IP} sudo docker login -u $USERNAME -p $PASSWORD"
+                sh "ssh ${DEPLOY_SERVER_IP} bash /home/ec2-user/deployConfig/docker-compose-script.sh ${IMAGE_NAME}"
+                }
+            }
+        }
+    }
+}
     }
 }
